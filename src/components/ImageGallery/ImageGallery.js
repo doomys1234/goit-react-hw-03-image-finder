@@ -1,14 +1,18 @@
 import React from "react";
 import ImageGalleryItem from "../ImageGalleryItem /ImageGalleryItem ";
 import s from "./ImageGallery.module.scss";
-export default function ImageGallery({ images }) {
+import PropTypes from "prop-types";
+export default function ImageGallery({ images, onImageClick }) {
   return (
-    <ul className={s.gallery}>
+    <ul className={s.image_gallery}>
       {images.map((image) => (
         <ImageGalleryItem
           key={image.id}
           webformatURL={image.webformatURL}
           largeImageURL={image.largeImageURL}
+          onClick={() => {
+            onImageClick(image.largeImageURL);
+          }}
         />
       ))}
 
@@ -18,3 +22,8 @@ export default function ImageGallery({ images }) {
     </ul>
   );
 }
+
+ImageGallery.propTypes = {
+  images: PropTypes.array,
+  onImageClick: PropTypes.func,
+};

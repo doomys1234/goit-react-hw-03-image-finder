@@ -1,35 +1,22 @@
 import React from "react";
 import s from "./Searchbar.module.scss";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 class Searchbar extends React.Component {
   state = {
     value: "",
     images: [],
-    loading: false,
   };
-  componentDidUpdate(prevProps, prevState) {
-    const preValue = prevState.value;
-    const nextValue = this.state.value;
-    const KEY = "24630234-63d298eb892b3c6f0ac62f70f";
 
-    if (preValue !== nextValue) {
-      this.setState({ loading: true });
-      fetch(
-        `https://pixabay.com/api/?q=${this.state.value}&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then((image) => this.setState({ images: image.hits }));
-    }
-  }
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    value: PropTypes.string,
+  };
 
   handleChange = (e) => {
-    const trimmedValue = e.target.value.trim();
+    const normalisedValue = e.currentTarget.value.toLowerCase();
     this.setState({
-      value: trimmedValue,
+      value: normalisedValue,
       images: [],
     });
   };
@@ -48,23 +35,25 @@ class Searchbar extends React.Component {
 
   render() {
     return (
-      <header className={s.searchbar}>
-        <form className={s.form} onSubmit={this.handleSubmit}>
-          <button type="submit" className={s.button}>
-            <span className={s.button_label}>Search</span>
-          </button>
+      <>
+        <header className={s.searchbar}>
+          <form className={s.search_form} onSubmit={this.handleSubmit}>
+            <button type="submit" className={s.search_button}>
+              <span className={s.search_button_label}>Search</span>
+            </button>
 
-          <input
-            className={s.input}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.handleChange}
-            value={this.state.value}
-          />
-        </form>
-      </header>
+            <input
+              className={s.search_input}
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+              onChange={this.handleChange}
+              value={this.state.value}
+            />
+          </form>
+        </header>
+      </>
     );
   }
 }
