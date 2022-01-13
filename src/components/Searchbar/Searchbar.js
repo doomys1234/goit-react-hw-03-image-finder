@@ -10,7 +10,6 @@ class Searchbar extends React.Component {
 
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    value: PropTypes.string,
   };
 
   handleChange = (e) => {

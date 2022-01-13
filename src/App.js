@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React from "react";
 import Loader from "react-loader-spinner";
 import { ToastContainer } from "react-toastify";
@@ -26,6 +27,7 @@ class App extends React.Component {
     const KEY = "24630234-63d298eb892b3c6f0ac62f70f";
 
     if (preValue !== nextValue) {
+      this.setState({ page: 1 });
       this.fetchImages(nextValue, nextPage, KEY);
     }
 
@@ -45,8 +47,17 @@ class App extends React.Component {
         }
       })
       .then((image) => {
+        const arrImages = [];
+        image.hits.forEach((img) => {
+          arrImages.push({
+            id: img.id,
+            webformatURL: img.webformatURL,
+            largeImageURL: img.largeImageURL,
+          });
+        });
+
         this.setState((prevState) => ({
-          images: [...prevState.images, ...image.hits],
+          images: [...prevState.images, ...arrImages],
           status: "resolved",
         }));
         if (this.prevPage !== nextPage) {
@@ -85,12 +96,14 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Searchbar onSubmit={this.onSubmit} value={this.state.value} />
+        <Searchbar onSubmit={this.onSubmit} />
 
-        <ImageGallery
-          images={this.state.images}
-          onImageClick={(largeImageUrl) => this.onImageClick(largeImageUrl)}
-        />
+        {this.state.status === "resolved" && (
+          <ImageGallery
+            images={this.state.images}
+            onImageClick={(largeImageUrl) => this.onImageClick(largeImageUrl)}
+          />
+        )}
         {this.state.status === "pending" && (
           <Loader
             type="TailSpin"

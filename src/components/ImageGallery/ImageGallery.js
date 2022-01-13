@@ -15,10 +15,6 @@ export default function ImageGallery({ images, onImageClick }) {
           }}
         />
       ))}
-
-      {/* {images.map(image{id, webformatURL, largeImageURL} => (
-            <ImageGalleryItem key={id} webformatURL={webformatURL} largeImageURL={largeImageURL}/>
-            ))} */}
     </ul>
   );
 }
