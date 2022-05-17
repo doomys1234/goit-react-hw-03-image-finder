@@ -28,18 +28,18 @@ class App extends React.Component {
 
     if (preValue !== nextValue) {
       this.setState({ page: 1 });
-      this.fetchImages(nextValue, nextPage, KEY);
+      this.fetchImages(nextValue, nextPage, KEY, 12);
     }
 
     if (prevPage !== nextPage) {
-      this.fetchImages(nextValue, nextPage, KEY);
+      this.fetchImages(nextValue, nextPage, KEY, 12);
     }
   }
 
-  fetchImages = (nextValue, nextPage, KEY) => {
+  fetchImages = (nextValue, nextPage, KEY, amountOfItems) => {
     this.setState({ status: "pending" });
     fetch(
-      `https://pixabay.com/api/?q=${nextValue}&page=${nextPage}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      `https://pixabay.com/api/?q=${nextValue}&page=${nextPage}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${amountOfItems}`
     )
       .then((response) => {
         if (response.ok) {
@@ -56,10 +56,15 @@ class App extends React.Component {
           });
         });
 
-        this.setState((prevState) => ({
-          images: [...prevState.images, ...arrImages],
-          status: "resolved",
-        }));
+        if (this.preValue !== nextValue) {
+          this.setState((prevState) => ({
+            images:
+              this.state.page > 1
+                ? [...prevState.images, ...arrImages]
+                : arrImages,
+            status: "resolved",
+          }));
+        }
         if (this.prevPage !== nextPage) {
           window.scrollTo({
             top: document.documentElement.scrollHeight,

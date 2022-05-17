@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 export default function ImageGallery({ images, onImageClick }) {
   return (
     <ul className={s.image_gallery}>
-      {images.map((image) => (
+      {images.map((image, index) => (
         <ImageGalleryItem
-          key={image.id}
+          key={index}
           webformatURL={image.webformatURL}
           largeImageURL={image.largeImageURL}
           onClick={() => {
