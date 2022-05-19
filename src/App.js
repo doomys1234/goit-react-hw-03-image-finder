@@ -31,13 +31,16 @@ class App extends React.Component {
       this.fetchImages(nextValue, nextPage, KEY, 12);
     }
 
-    if (prevPage !== nextPage) {
+    if (nextPage === 1) {
+      return;
+    } else if (prevPage !== nextPage) {
       this.fetchImages(nextValue, nextPage, KEY, 12);
     }
   }
 
   fetchImages = (nextValue, nextPage, KEY, amountOfItems) => {
     this.setState({ status: "pending" });
+
     fetch(
       `https://pixabay.com/api/?q=${nextValue}&page=${nextPage}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${amountOfItems}`
     )
@@ -56,15 +59,15 @@ class App extends React.Component {
           });
         });
 
-        if (this.preValue !== nextValue) {
-          this.setState((prevState) => ({
-            images:
-              this.state.page > 1
-                ? [...prevState.images, ...arrImages]
-                : arrImages,
-            status: "resolved",
-          }));
-        }
+        // if (this.preValue !== nextValue) {
+        this.setState((prevState) => ({
+          images:
+            this.state.page > 1
+              ? [...prevState.images, ...arrImages]
+              : arrImages,
+          status: "resolved",
+        }));
+        // }
         if (this.prevPage !== nextPage) {
           window.scrollTo({
             top: document.documentElement.scrollHeight,
