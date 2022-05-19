@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 import React from "react";
 import Loader from "react-loader-spinner";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "react-toastify/dist/ReactToastify.css";
 import Searchbar from "./components/Searchbar/Searchbar.js";
@@ -79,6 +79,10 @@ class App extends React.Component {
   };
 
   onSubmit = ({ value, images, loading }) => {
+    if (this.state.value === value) {
+      toast.error("You are looking at it now");
+      return;
+    }
     this.setState({ value, images, loading });
   };
 
