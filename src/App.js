@@ -27,13 +27,16 @@ class App extends React.Component {
     const KEY = "24630234-63d298eb892b3c6f0ac62f70f";
 
     if (preValue !== nextValue) {
+      console.log(this.state.page);
+
       this.setState({ page: 1 });
       this.fetchImages(nextValue, nextPage, KEY, 12);
     }
 
-    if (nextPage === 1) {
-      return;
-    } else if (prevPage !== nextPage) {
+    if (prevPage !== nextPage) {
+      if (nextPage === 1) {
+        return;
+      }
       this.fetchImages(nextValue, nextPage, KEY, 12);
     }
   }
@@ -83,13 +86,17 @@ class App extends React.Component {
       toast.error("You are looking at it now");
       return;
     }
-    this.setState({ value, images, loading });
+
+    if (this.state.value !== value) {
+      this.setState({ value, images, loading, page: 1 });
+    }
   };
 
   loadMore = () => {
     this.setState((prevState) => ({
       page: prevState.page + 1,
     }));
+    console.log(this.state.page);
   };
 
   toggleModal = (e) => {
